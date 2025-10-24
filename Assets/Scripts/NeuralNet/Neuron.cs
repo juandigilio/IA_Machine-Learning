@@ -36,7 +36,8 @@ public class Neuron
 
 		a += bias * weights[weights.Length - 1];
 
-		return Sigmoid(a);
+		//return Sigmoid(a);
+		return Tanh(a);
 	}
 
 	public int SetWeights(float[] newWeights, int fromId)
@@ -58,4 +59,9 @@ public class Neuron
 	{
 		return 1.0f / (1.0f + Mathf.Exp(-a / p));
 	}
+
+    private float Tanh(float a)
+    {
+        return System.MathF.Tanh(a / p);
+    }
 }

@@ -19,7 +19,11 @@ public class Tank : TankBase
 
         float[] output = brain.Synapsis(inputs);
 
+        //Debug.Log($"Output 0: " + output[0]);
+        //Debug.Log($"Output 1: " + output[1]);
+
         SetForces(output[0], output[1], dt);
+        //Debug.Log($"DT: " + dt);
     }
 
     protected override void OnTakeMine(GameObject mine)
