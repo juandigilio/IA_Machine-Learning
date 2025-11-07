@@ -1,19 +1,19 @@
-﻿using UnityEngine;
-using System.Collections;
+using UnityEngine;
 
-public class TankBase : MonoBehaviour
+public class Scavenger : MonoBehaviour
 {
     public float Speed = 10.0f;
     public float RotSpeed = 20.0f;
 
-    protected Genome genome;
-	protected NeuralNetwork brain;
+    private Genome genome;
+    private NeuralNetwork brain;
     protected GameObject nearMine;
-    protected GameObject goodMine;
-    protected GameObject badMine;
-    protected float[] inputs;
+    //protected GameObject goodMine;
+    //protected GameObject badMine;
+    private float[] inputs;
 
-    protected float fitnessToGive = 0;
+    private float fitness = 0;
+    private float fitnessToGive = 0;
 
     public void SetBrain(Genome genome, NeuralNetwork brain)
     {
@@ -23,37 +23,17 @@ public class TankBase : MonoBehaviour
         OnReset();
     }
 
-    public void SetNearestMine(GameObject mine)
-    {
-        nearMine = mine;
-    }
-
-    public void SetGoodNearestMine(GameObject mine)
-    {
-        goodMine = mine;
-    }
-
-    public void SetBadNearestMine(GameObject mine)
-    {
-        badMine = mine;
-    }
-
-    protected bool IsGoodMine(GameObject mine)
-    {
-        return goodMine == mine;
-    }
-
-    protected Vector3 GetDirToMine(GameObject mine)
+    private Vector3 GetDirToMine(GameObject mine)
     {
         return (mine.transform.position - this.transform.position).normalized;
     }
-    
-    protected bool IsCloseToMine(GameObject mine)
+
+    private bool IsCloseToMine(GameObject mine)
     {
         return (this.transform.position - nearMine.transform.position).sqrMagnitude <= 2.0f;
     }
 
-    protected void SetForces(float leftForce, float rightForce, float dt)
+    private void SetForces(float leftForce, float rightForce, float dt)
     {
         Vector3 pos = this.transform.position;
         float rotFactor = Mathf.Clamp((rightForce - leftForce), -1.0f, 1.0f);
@@ -78,29 +58,44 @@ public class TankBase : MonoBehaviour
         }
     }
 
-	public void Think(float dt) 
-	{
+    public void Think(float dt)
+    {
         OnThink(dt);
 
-        if(IsCloseToMine(nearMine))
+        if (IsCloseToMine(nearMine))
         {
             OnTakeMine(nearMine);
             PopulationManager.Instance.RelocateMine(nearMine);
         }
-	}
-
-    protected virtual void OnThink(float dt)
-    {
-
     }
 
-    protected virtual void OnTakeMine(GameObject mine)
+    private void OnReset()
     {
-
+        fitness = 1;
     }
 
-    protected virtual void OnReset()
+    private void OnThink(float dt)
     {
+        Vector3 dirToMine = GetDirToMine(nearMine);
 
+        inputs[0] = dirToMine.x;
+        inputs[1] = dirToMine.z;
+        inputs[2] = transform.forward.x;
+        inputs[3] = transform.forward.z;
+
+        float[] output = brain.Synapsis(inputs);
+
+        //Debug.Log($"Output 0: " + output[0]);
+        //Debug.Log($"Output 1: " + output[1]);
+
+        SetForces(output[0], output[1], dt);
+        //Debug.Log($"DT: " + dt);
+    }
+
+    private void OnTakeMine(GameObject mine)
+    {
+        fitness += fitnessToGive;
+        fitness *= 2;
+        genome.fitness = fitness;
     }
 }
