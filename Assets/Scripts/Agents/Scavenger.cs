@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Scavenger : MonoBehaviour
+public class Scavenger : Agent
 {
     public float Speed = 10.0f;
     public float RotSpeed = 20.0f;
