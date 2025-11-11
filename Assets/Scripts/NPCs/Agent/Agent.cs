@@ -26,6 +26,8 @@ public class Agent : MonoBehaviour, IAutomaton<Agent.States, Agent.Flags>
         OnTargetLost
     }
 
+    [SerializeField] public Color color = Color.white;
+
     public FSM<States, Flags> Fsm { get; private set; }
 
     public Transform target;
@@ -33,6 +35,7 @@ public class Agent : MonoBehaviour, IAutomaton<Agent.States, Agent.Flags>
     public float explodeDistance;
     public float lostDistance;
 
+    public MeshRenderer mesh;
     public Transform wayPoint1;
     public Transform wayPoint2;
     public float chaseDistance;
@@ -40,33 +43,40 @@ public class Agent : MonoBehaviour, IAutomaton<Agent.States, Agent.Flags>
     //Graph
     private Node<Vector2Int> node;
 
-    public void Start()
+
+    private void Start()
     {
-        //pasar cada fsm a cada agente en especifico?????
-        /////////////////////////////////////////////////
-        ///
-
-        Fsm = new FSM<States, Flags>(States.Patrol);
-
-        Fsm.AddState<PatrolState>(States.Patrol,
-            onTickParameters: () => new object[] { wayPoint1, wayPoint2, transform, target, speed, chaseDistance, Time.deltaTime }
-        );
-
-        Fsm.AddState<ChaseState>(States.Chase,
-            onTickParameters: () => new object[] { transform, target, speed, explodeDistance, lostDistance, Time.deltaTime }
-        );
-
-        Fsm.AddState<ExplodeState>(States.Explode);
-
-        Fsm.SetTransition(States.Patrol, Flags.OnTargetNear, States.Chase, () => { Debug.Log("Te vi"); });
-        Fsm.SetTransition(States.Chase, Flags.OnTargetReach, States.Explode);
-        Fsm.SetTransition(States.Chase, Flags.OnTargetLost, States.Patrol);
+        mesh.material.color = color;
     }
+    //public void Start()
+    //{
+    //    //pasar cada fsm a cada agente en especifico?????
+    //    /////////////////////////////////////////////////
+    //    ///
+    //    //mesh = GetComponent<MeshRenderer>();
+    //    mesh.material.color = color;
 
-    private void Update()
-    {
-        Fsm.Tick();
-    }
+    //    Fsm = new FSM<States, Flags>(States.Patrol);
+
+    //    Fsm.AddState<PatrolState>(States.Patrol,
+    //        onTickParameters: () => new object[] { wayPoint1, wayPoint2, transform, target, speed, chaseDistance, Time.deltaTime }
+    //    );
+
+    //    Fsm.AddState<ChaseState>(States.Chase,
+    //        onTickParameters: () => new object[] { transform, target, speed, explodeDistance, lostDistance, Time.deltaTime }
+    //    );
+
+    //    Fsm.AddState<ExplodeState>(States.Explode);
+
+    //    Fsm.SetTransition(States.Patrol, Flags.OnTargetNear, States.Chase, () => { Debug.Log("Te vi"); });
+    //    Fsm.SetTransition(States.Chase, Flags.OnTargetReach, States.Explode);
+    //    Fsm.SetTransition(States.Chase, Flags.OnTargetLost, States.Patrol);
+    //}
+
+    //private void Update()
+    //{
+    //    Fsm.Tick();
+    //}
 
     public void SetNode(Node<Vector2Int> node)
     {

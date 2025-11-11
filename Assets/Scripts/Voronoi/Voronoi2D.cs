@@ -31,7 +31,6 @@ public class Voronoi2D : Voronoi<Node<Vector2Int>>
                 }
             }
 
-
             //cirunavegable
 
             //if (isInside)

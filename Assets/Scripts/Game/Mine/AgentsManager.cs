@@ -126,7 +126,7 @@ public class AgentsManager : MonoBehaviour
     private void InstantiateScavengers()
     {
         Node<Vector2Int> zeroNode = zeroNode = grapf.GetNodeAt(0, 0);
-        Node<Vector2Int> limitNode = grapf.GetNodeAt(GameData.width, GameData.height);
+        Node<Vector2Int> limitNode = grapf.GetNodeAt(GameData.width - 1, GameData.height - 1);
 
         Vector2Int minRange = zeroNode.GetWorldPosition();
         Vector2Int maxRange = limitNode.GetWorldPosition();
@@ -174,7 +174,7 @@ public class AgentsManager : MonoBehaviour
         return hervivorousAgents;
     }
 
-    public List<Carnivorous> GetCarnous()
+    public List<Carnivorous> GetCarnivorous()
     {
         return carnivorousAgents;
     }

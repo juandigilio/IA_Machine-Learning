@@ -4,11 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     //mines
-    [SerializeField] private AgentsManager mineManager;
-    [SerializeField] private Mine minePrefab;
-    [SerializeField] private int totalMines;
-
-    [SerializeField] private Transform minerPrefab;
+    [SerializeField] private AgentsManager agentManager;
 
     //grapf
     [SerializeField] private Vector2Int startCoordinates = new Vector2Int(0, 0);
@@ -16,7 +12,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool resetPathfinder = true;
     [SerializeField] private bool resetGrapf = true;
     [SerializeField] private bool drawGizmos = true;
-
 
     //Testing
     [SerializeField] private Transform testTransform;
@@ -54,7 +49,7 @@ public class GameManager : MonoBehaviour
 
         grapfView.DrawGizmos();
         //voronoi.DrawGizmos(traveler.GetTransform());
-        voronoi.DrawGizmos(testTransform);
+        //voronoi.DrawGizmos(testTransform);
 
         if (grapf != null)
         {
@@ -77,7 +72,8 @@ public class GameManager : MonoBehaviour
 
             grapf = new Vector2IntGrapf(GameData.width, GameData.height, GameData.nodeDistance);
 
-            //mineManager.InstantiateMines(grapf, minePrefab, totalMines);
+            agentManager.SetGrapf(grapf);
+            agentManager.InstantiateAgents();
 
             startNode = grapf.GetNodeAt(startCoordinates);
             destinationNode = grapf.GetNodeAt(destinationCoordinates);
@@ -86,12 +82,13 @@ public class GameManager : MonoBehaviour
 
             //voronoi
 
-            List<Node<Vector2Int>> minesNodes = new List<Node<Vector2Int>>();
-            foreach(Mine mine in mineManager.GetMines())
+            List<Node<Vector2Int>> carnivorousNodes = new List<Node<Vector2Int>>();
+
+            foreach(Carnivorous agent in agentManager.GetCarnivorous())
             {
-                minesNodes.Add(mine.GetNode());
+                carnivorousNodes.Add(agent.GetNode());
             }        
-            voronoi = new Voronoi2D(minesNodes, grapf);
+            voronoi = new Voronoi2D(carnivorousNodes, grapf);
 
 
             //Testing
@@ -106,9 +103,9 @@ public class GameManager : MonoBehaviour
         {
             resetPathfinder = false;
 
-            traveler = new Traveler(grapf, GameData.pathfinderType, minerPrefab, startNode, destinationNode);
-            StopAllCoroutines();
-            StartCoroutine(traveler.Move());
+            //traveler = new Traveler(grapf, GameData.pathfinderType, minerPrefab, startNode, destinationNode);
+            //StopAllCoroutines();
+            //StartCoroutine(traveler.Move());
         }      
     }
 
