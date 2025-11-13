@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
                 {
                     point.drawGizmos = drawGizmos;
                 }
+                
                 point.DrawGizmos();
             }
         }
