@@ -3,8 +3,8 @@ using UnityEngine;
 public class GrapfView
 {
     private Vector2IntGrapf grapf;
-    private Node<Vector2Int> startNode;
-    private Node<Vector2Int> destinationNode;
+    //private Node<Vector2Int> startNode;
+    //private Node<Vector2Int> destinationNode;
 
     public void DrawGizmos()
     {
@@ -35,15 +35,15 @@ public class GrapfView
         }
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(new Vector3(startNode.GetWorldPosition().x, startNode.GetWorldPosition().y), 0.3f);
-        Gizmos.DrawSphere(new Vector3(destinationNode.GetWorldPosition().x, destinationNode.GetWorldPosition().y), 0.3f);
+        //Gizmos.DrawSphere(new Vector3(startNode.GetWorldPosition().x, startNode.GetWorldPosition().y), 0.3f);
+        //Gizmos.DrawSphere(new Vector3(destinationNode.GetWorldPosition().x, destinationNode.GetWorldPosition().y), 0.3f);
     }
 
-    public void SetGraph(Vector2IntGrapf grapf, Node<Vector2Int> startNode, Node<Vector2Int> destinationNode)
+    public void SetGraph(Vector2IntGrapf grapf)
     {
         this.grapf = grapf;
-        this.startNode = startNode;
-        this.destinationNode = destinationNode;
+        //this.startNode = startNode;
+        //this.destinationNode = destinationNode;
 
         //Debug.Log("Graph set in GrapfView");
     }

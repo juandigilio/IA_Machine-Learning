@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class AgentsManager : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class AgentsManager : MonoBehaviour
     [SerializeField] private Carnivorous carnivorousPrefab;
     [SerializeField] private Scavenger scavengerPrefab;
     [SerializeField] private Plant plantPrefab;
+    [SerializeField] private PathfinderType pathfinderType = new PathfinderType();
 
     private List<Herbivorous> hervivorousAgents = new List<Herbivorous>();
     private List<Carnivorous> carnivorousAgents = new List<Carnivorous>();
@@ -14,10 +17,42 @@ public class AgentsManager : MonoBehaviour
     private List<Plant> plantAgents = new List<Plant>();
 
     private Vector2IntGrapf grapf;
+    private Voronoi2D voronoi;
+
+
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        //voronoi.DrawGizmos(testTransform);
+
+
+        //testing gizmos
+        //if (grapf != null)
+        //{
+        //    foreach (Voronoi2DPoint point in voronoi.GetAllPoints())
+        //    {
+        //        if (point.drawGizmos != drawGizmos)
+        //        {
+        //            point.drawGizmos = drawGizmos;
+        //        }
+
+        //        point.DrawGizmos();
+        //    }
+        //}
+    }
 
     public void SetGrapf(Vector2IntGrapf grapf)
     {
         this.grapf = grapf;
+
+        if (this.grapf == null)
+        {
+            Debug.Log("null grapf in AgentsManager");
+        }
     }
 
     public void InstantiateAgents()
@@ -38,6 +73,44 @@ public class AgentsManager : MonoBehaviour
         InstantiateScavengers();
 
         InstantiatePlants();
+
+        SetVoronoi();
+    }
+
+    private void SetVoronoi()
+    {
+        List<Node<Vector2Int>> plantsNodes = new List<Node<Vector2Int>>();
+
+        foreach (Plant agent in plantAgents)
+        {
+            plantsNodes.Add(agent.GetNode());
+        }
+
+        voronoi = new Voronoi2D(plantsNodes, grapf);
+
+        foreach (Herbivorous agent in hervivorousAgents)
+        {
+            agent.SetNearestPlant(voronoi.GetSeccion(agent.GetNode().GetWorldPosition()).node);
+            //Debug.Log(agent.GetNearestPlant().GetCoordinate());
+
+            Traveler traveler = new Traveler(grapf, pathfinderType, agent.transform, agent.GetNode(), agent.GetNearestPlant());
+
+            agent.SetTraveler(traveler);
+            agent.SetPath(traveler.GetPath());
+
+            Debug.Log(traveler.GetPath().Count);
+
+
+
+            //Debug.Log("traveler set");
+
+            foreach (Node<Vector2Int> node in traveler.GetPath())
+            {
+                Debug.Log(node.GetCoordinate());
+            }
+
+            //agent.Move();
+        }
     }
 
     private List<Vector2Int> GetRandomAvailableNodes(Vector2IntGrapf grapf, int totalNodes, Vector2Int yRange)

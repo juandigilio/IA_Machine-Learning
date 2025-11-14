@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class AStarPathfinder<NodeType> : Pathfinder<NodeType> where NodeType : INode<Vector2Int>, INode
@@ -40,6 +41,7 @@ public class AStarPathfinder<NodeType> : Pathfinder<NodeType> where NodeType : I
 
             if (currentNode.Equals(destinationNode))
             {
+                Debug.Log("Path Generated");
                 return GeneratePath(startNode, destinationNode);
             }
 
@@ -68,6 +70,7 @@ public class AStarPathfinder<NodeType> : Pathfinder<NodeType> where NodeType : I
             }
         }
 
+        Debug.Log("No Path finded");
         return new List<NodeType>();
 
         List<NodeType> GeneratePath(NodeType startNode, NodeType goalNode)

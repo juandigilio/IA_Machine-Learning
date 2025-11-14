@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 //Agent (miner)
@@ -26,26 +27,24 @@ public class Agent : MonoBehaviour, IAutomaton<Agent.States, Agent.Flags>
         OnTargetLost
     }
 
-    [SerializeField] public Color color = Color.white;
+    [SerializeField] protected Color color = Color.white;
+    [SerializeField] private MeshRenderer mesh;
+
 
     public FSM<States, Flags> Fsm { get; private set; }
 
-    public Transform target;
-    public float speed;
-    public float explodeDistance;
-    public float lostDistance;
 
-    public MeshRenderer mesh;
-    public Transform wayPoint1;
-    public Transform wayPoint2;
-    public float chaseDistance;
 
     //Graph
     private Node<Vector2Int> node;
+    private List<Node<Vector2Int>> currentPath;
+
+    private Traveler traveler;
 
 
     private void Start()
     {
+        mesh = GetComponent<MeshRenderer>();
         mesh.material.color = color;
     }
     //public void Start()
@@ -77,6 +76,22 @@ public class Agent : MonoBehaviour, IAutomaton<Agent.States, Agent.Flags>
     //{
     //    Fsm.Tick();
     //}
+
+    public void Move()
+    {
+        //StopAllCoroutines();
+        StartCoroutine(traveler.Move());
+    }
+
+    public void SetTraveler(Traveler traveler)
+    {
+        this.traveler = traveler;
+    }
+
+    public void SetPath(List<Node<Vector2Int>> currentPath)
+    {
+        this.currentPath = currentPath;
+    }
 
     public void SetNode(Node<Vector2Int> node)
     {
