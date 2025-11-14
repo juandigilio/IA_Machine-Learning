@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public interface INode
@@ -15,4 +16,5 @@ public interface INode<Coordinate>
     public Coordinate GetCoordinate();
     public void SetWorldPosition(Coordinate worldPosition);
     public Coordinate GetWorldPosition();
+    public bool Equals(INode<Coordinate> other);
 }

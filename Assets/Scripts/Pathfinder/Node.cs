@@ -47,9 +47,9 @@ public class Node<Coordinate> : INode, INode<Coordinate>
         this.terrainCost = terrainCost;
     }
 
-    public override bool Equals(object obj)
+    public bool Equals(INode<Coordinate> other)
     {
-        if (obj is Node<Coordinate> other)
+        if (coordinate. == other.GetCoordinate().x)
         {
             if (coordinate == null) return other.coordinate == null;
             return coordinate.Equals(other.coordinate);

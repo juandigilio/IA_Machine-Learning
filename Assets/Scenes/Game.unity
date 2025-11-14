@@ -519,6 +519,7 @@ MonoBehaviour:
   carnivorousPrefab: {fileID: 4242543559714042179, guid: 30963ea2d72972e46a3a1d0604b83d8b, type: 3}
   scavengerPrefab: {fileID: 6276020028068004623, guid: 0c74d2ba5fedc1d46a4dfc74e7c82c47, type: 3}
   plantPrefab: {fileID: 4153292963111013918, guid: 48833d5c31814394f9b96a2737cae1e7, type: 3}
+  pathfinderType: 3
 --- !u!114 &1945216112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,8 +533,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentManager: {fileID: 1945216111}
-  startCoordinates: {x: 0, y: 0}
-  destinationCoordinates: {x: 9, y: 9}
   resetPathfinder: 1
   resetGrapf: 1
   drawGizmos: 1
